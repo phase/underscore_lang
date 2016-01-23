@@ -9,26 +9,28 @@
 This isn't meant to be a language to change the world
 or revolutionize the way we program. I just like programming
 linguistics. This is a language made up of everything
-I've come to enjoy in certain languages over the years.
+I've come to enjoy in different languages over the years.
 
 ## What is different about this language?
-Really, not a whole lot. Apart from the lack of a lot of
-syntactic tokens, and the ability to dynamically change
-the language, there isn't much in the way of [*oh wow
-that's a crazy language that has never been done before
-I can't believe this is real life*](http://urbit.org/). This
-is meant to be a fast, powerful, general purpose language.
-You are meant to write _real_ software with this, not
-some crazy language that only has a couple use cases.
+This is meant to be a fast, powerful, general purpose
+language. You are meant to write _real_ software with
+this, not some crazy language that only has a couple
+use cases. Here's a list of its (soon to be) features:
+
+* Concise Syntax
+* Fast (JIT Compiled)
+* Interop with C and other LLVM languages
+* Portable
+* Easy Scripting
 
 ## Let's see it!
 Prepare your eyeballs. (_Comments are after `//`_)
 
 ```javascript
-add (a, b) = a + b
+add (int a, int b) = a + b
 print add 5, 6 // print(add(5,6))
 
-multiply (a, b) = {
+multiply (int a, int b) = {
     int t // initialized to 0
     i = b // create new variable i with the type and value of b
     while i-- > 0 {
@@ -39,7 +41,7 @@ multiply (a, b) = {
 print multiply 7, 2 // 14
 print multiply add(2,3), 5 // 25; add parentheses where needed
 
-print ((a,b) = -a * b) 2, 4 // -8; complicated lambda
+print ((int a, int b) = -a * b) 2, 4 // -8; complicated lambda
 
 object O {
 }
