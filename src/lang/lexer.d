@@ -1,4 +1,7 @@
 import std.stdio;
+import std.ascii;
+import std.conv;
+import std.algorithm;
 
 class Token {
     // Base Token Class
@@ -12,6 +15,22 @@ class Identifier : Token {
     }
 }
 
+class IntegerNumeral : Token {
+    int num;
+    
+    this(int n) {
+        num = n;
+    }
+}
+
+class Separator : Token {
+    char separator;
+    
+    this(char c) {
+        separator = c;
+    }
+}
+
 void parse(char[] prog) {
     Token[] tokens;
     //flags
@@ -19,8 +38,8 @@ void parse(char[] prog) {
     bool multiComment;
     //vars for storing stuff
     char last;
-    char[] buf;
-    foreach(c; prog) {
+    for(int i = 0; i < prog.length; i++) {
+        char c = prog[i];
         //Comments
         if(multiComment) {
             if(last == '*' && c == '/') multiComment = false;
@@ -38,22 +57,28 @@ void parse(char[] prog) {
                 multiComment = true;
             }
         }
-        else if(alphnum(c)) {
+        else if(isAlpha(c)) {
+            char[] buf;
             buf ~= c;
+            while(isAlpha(prog[i+1])) buf ~= prog[++i];
+            tokens ~= new Identifier(to!string(buf));
         }
-        else if(c == ' ') {
-            if(buf != "") {
-                tokens ~= new Identifier(buf);
-            }
+        else if(isDigit(c)) {
+            char[] buf;
+            buf ~= c;
+            while(isDigit(prog[i+1])) buf ~= prog[++i];
+            tokens ~= new IntegerNumeral(to!int(buf));
+        }
+        else if(isSeparator(c)) {
+            tokens ~= new Separator(c);
         }
         else {
             //TODO: not sure what should be here
-            write(c);
         }
         last = c;
     }
 }
-
-bool alphnum(char c) {
-    return (c>='a' && c<='z') || (c>='A' && c<='Z') || (ch>='0' && ch<='9'))
+const char[] separators = {' ',';',',','.','`','@','(',')','{','}','[',']'}
+bool isSeparator(char c) {
+    return separators.canFind(c);
 }
